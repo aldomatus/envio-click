@@ -2,6 +2,7 @@ from flask import Flask, current_app, jsonify, request, url_for, render_template
 from werkzeug.exceptions import HTTPException, InternalServerError
 import newrelic.agent
 from app.drivers import drivers
+from app.vehicles import vehicles
 from app.database import db_session
 
 def create_app():
@@ -9,6 +10,7 @@ def create_app():
     app.config.from_object('app.config.Config')
     # Blueprints
     app.register_blueprint(drivers)
+    app.register_blueprint(vehicles)
 
     @app.route("/ping", methods=['GET'])
     def ping():
