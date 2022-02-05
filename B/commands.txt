@@ -1,1 +1,1 @@
-docker stop fleet_local; docker build -t fleet_local:local_latest . ; docker run --rm -d -it --env-file=.env -v ${PWD}:/usr/src/app -p 5018:5000 --name fleet_local fleet_local:local_latest; docker logs -f fleet_local;
+docker stop fleet_local; docker build -t fleet_local:local_latest . ; docker run --rm -d -it --env-file=.env -v ${PWD}:/usr/src/app -p 5022:5000 --name fleet_local fleet_local:local_latest; docker logs -f fleet_local;

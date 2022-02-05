@@ -4,32 +4,31 @@ import pytz
 
 from sqlalchemy_utils import UUIDType
 from app.database import Base
-from sqlalchemy import Column, String, DateTime, Boolean 
+from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, Text
+from sqlalchemy.orm import relationship
 
 tz = pytz.timezone('America/Mexico_City')
 
-class Driver(Base):
-    __tablename__ = 'drivers'
+class Assignment(Base):
+    __tablename__ = 'assignments'
     id = Column(UUIDType(binary=False), primary_key=True)
-    name = Column(String(120))
-    first_lastname = Column(String(120))
-    second_lastname = Column(String(120))
-    dob = Column(DateTime, nullable=True, default = datetime.datetime(1990, 1, 1, hour=0, minute=0, second=0, microsecond=0))
-    email = Column(String(120), unique=True)
-    phone = Column(String(10))
-    credential_type = Column(String(5))
+    vehicle_id = Column(UUIDType(binary=False), ForeignKey('vehicles.id'))
+    driver_id =  Column(UUIDType(binary=False), ForeignKey('drivers.id'))
+    expiration_date = Column(DateTime, nullable = False, default = datetime.datetime.now(tz=tz))
+    is_expired = Column(Boolean, default=False)
+    area = Column(String(300))
+    notes = Column(Text())
     created_at = Column(DateTime, nullable=True,default=datetime.datetime.now(tz=tz))
     updated_at = Column(DateTime, nullable=True,default=datetime.datetime.now(tz=tz),onupdate=datetime.datetime.now(tz=tz))
 
     
-    def __init__(self, email, name, first_lastname, second_lastname, dob, phone, credential_type):
+    def __init__(self, vehicle_id, driver_id, expiration_date, is_expired, area, notes):
         self.id = uuid.uuid4()
-        self.email = email    
-        self.name = name
-        self.first_lastname = first_lastname
-        self.second_lastname = second_lastname
-        self.dob = dob
-        self.phone = phone
-        self.credential_type = credential_type
+        self.vehicle_id = vehicle_id    
+        self.driver_id = driver_id
+        self.expiration_date = expiration_date
+        self.is_expired = is_expired
+        self.area = area
+        self.notes = notes
         self.created_at = datetime.datetime.now(tz=tz)
         self.updated_at = datetime.datetime.now(tz=tz)

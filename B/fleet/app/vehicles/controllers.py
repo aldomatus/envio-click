@@ -31,7 +31,7 @@ def create_vehicle_expedient(request):
 
 def get_vehicle_expedient(VIN):
     try:
-       return db_session.query(Vehicle).filter_by(VIN=VIN).one()
+        return db_session.query(Vehicle).filter_by(VIN=VIN).one()
     except Exception as e:
         print('Vehicle does not exist in fleet database yet | ', e)
         return None

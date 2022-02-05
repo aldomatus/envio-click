@@ -3,6 +3,7 @@ from werkzeug.exceptions import HTTPException, InternalServerError
 import newrelic.agent
 from app.drivers import drivers
 from app.vehicles import vehicles
+from app.assignments import assignments
 from app.database import db_session
 
 def create_app():
@@ -11,6 +12,7 @@ def create_app():
     # Blueprints
     app.register_blueprint(drivers)
     app.register_blueprint(vehicles)
+    app.register_blueprint(assignments)
 
     @app.route("/ping", methods=['GET'])
     def ping():

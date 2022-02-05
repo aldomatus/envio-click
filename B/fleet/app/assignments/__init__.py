@@ -7,12 +7,13 @@ assignments = Blueprint('assignments', __name__, url_prefix='/assignments')
 def post_assignment():
     try:
         if request.get_json():
-            if create_assignment_expedient(request.get_json()):
-                e = get_assignment_expedient(request.json['email']) 
-                print(f'User {e.email} has been created')        
-                return jsonify(success=True,user=e.email), 201
+            assignment = create_assignment_expedient(request.get_json())
+            if assignment[1]:
+                e = get_assignment_expedient(assignment[0]['driver_id'], assignment[0]['vehicle_id']) 
+                print(f'Assignment with driver: {str(e.driver_id)} and {str(e.vehicle_id)} has been created')        
+                return jsonify(success = True, message=f"assignment with driver: {assignment[0]['driver_id']} and vehicle: {assignment[0]['vehicle_id']} has been registered"), 201
             else:
-                return jsonify(success=False, message=f"assignment {request.json['email']} is already registered"), 409
+                return jsonify(success=False, message=f"assignment with driver: {request.get_json()['driver_email']} and vehicle: {request.get_json()['VIN']}is already registered"), 409
     except Exception as e:
         print(e)
         return jsonify(success=False), 400
