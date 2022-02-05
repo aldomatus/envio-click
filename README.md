@@ -205,10 +205,16 @@ For this project you need to have Docker and Docker installed
 </div>
 
 #### Entity relationship model
+
+<div align="center">
+ <img src=https://i.imgur.com/FmXAdqu.png width="800" alt="Header" >
+  </div>
+
 For the construction of the database, the relationship entity model was made with which the relationships between each table were deduced. 
 <div align="center">
  <img src=https://i.imgur.com/63jXTbK.png width=1000 alt="Header" >
 </div>
+
 
 Para la construccion de la base de datos se tomaron en cuenta los siguientes aspectos:
 * Las principales entidades a guardar seran: vehiculos, conductores y asignaciones
@@ -250,6 +256,37 @@ Descripción:
 * Las asignaciones son unicas es decir no se puede repetir una asignacion con mismo id de vehiculo y driver
 * La tabla contendrá otros datos de la asignacion como: fecha, si ya ha expirado, notas, área etc.
 
+### Installation 🖥
+
+1. To obtain my repository you must create a folder in a desired directory and within this folder open a terminal or use cmd in the case of windows.
+2. Clone the repo
+   ```
+   git clone git@github.com:aldomatus/envio-click.git
+   
+   ```
+3. Move to envio_click directory
+   ```
+   cd envio_click/A/A2
+   
+   ```
+4. Build Docker container
+   ```
+   docker build -t fleet_local:local_latest . ;
+   ```
+   
+4. Build Docker container
+   ```
+   docker build -t fleet_local:local_latest . ;
+   ```
+   
+5. Run Docker container
+   ```
+   docker run --rm -d -it --env-file=.env -v ${PWD}:/usr/src/app -p 5022:5000 --name fleet_local fleet_local:local_latest;
+   ```
+6. To see the logs at runtime
+   ```
+   docker logs -f fleet_local;
+   ```
 
 
 
