@@ -186,7 +186,69 @@ Link to visit postman website: - [Link](https://www.postman.com/downloads/)
 </div>
 
 
+### Prerequisites
+For this project you need to have Docker and Docker installed
 
+<ol>
+<li>Link to install Docker engine:</li>
+<a href="https://docs.docker.com/engine/install/ubuntu/">Linux</a>
+<a href="https://docs.docker.com/engine/install/">  -  Windows or Mac</a>
+
+<li>After installing docker engine install docker compose</li>
+<a href="https://docs.docker.com/compose/install/">Linux Windows Mac</a>
+</li>
+
+
+### Aplicación para gestionar una flota de vehículos 🚚📦
+<div align="center">
+ <img src=https://blog.llerandi.com/hubfs/flota%20de%20vehiculos.jpg width=500 alt="Header" >
+</div>
+
+#### Entity relationship model
+For the construction of the database, the relationship entity model was made with which the relationships between each table were deduced. 
+<div align="center">
+ <img src=https://i.imgur.com/63jXTbK.png width=1000 alt="Header" >
+</div>
+
+Para la construccion de la base de datos se tomaron en cuenta los siguientes aspectos:
+* Las principales entidades a guardar seran: vehiculos, conductores y asignaciones
+* Se elaborá una tabla para cada entidad
+* La tabla que hará las relaciones entre conductores y vehiculos será la tabla de asignaciones por lo que contendrá las llaves foraneas de cada entidad
+* Un conductor puede tener asignado varios autos pero un auto puede estar asignado a un solo conductor
+
+##### Tabla drivers
+<div align="center">
+ <img src=https://i.imgur.com/UovtKxz.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType que será la llave con la que relacionaremos con los vehiculos a cada conductor
+* El email empresarial del conductor será una llave unica que lo identificará junto a su id (Elegiremos el email por su facilidad de memorizar y manejar) 
+* Tendremos un valor único que es el Número de Identificación Vehicular VIN (Vehicle Identification Number) consta de 17 caracteres alfanuméricos 
+* La tabla contendrá otros datos del conductor como nombre, fecha de nacimiento (dob), tipo de crdencial con la que cuenta, telefono etc.
+
+
+##### Tabla vehicles
+<div align="center">
+ <img src=https://i.imgur.com/Bwy81FS.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType que será la llave con la que relacionaremos con los conductores a cada vehiculo
+* Tendremos un valor único que es el Número de Identificación Vehicular VIN (Vehicle Identification Number) consta de 17 caracteres alfanuméricos 
+* La tabla contendrá otros datos del vehiculo como: marca, modelo, maxima carga permitida, tipo de vehiculo y otras
+
+
+##### Tabla assignments
+<div align="center">
+ <img src=https://i.imgur.com/1pRaSu1.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType 
+* Relacionaremos dos llaves foraneas (llave foranea de vehicle y driver)
+* Las asignaciones son unicas es decir no se puede repetir una asignacion con mismo id de vehiculo y driver
+* La tabla contendrá otros datos de la asignacion como: fecha, si ya ha expirado, notas, área etc.
 
 
 
