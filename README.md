@@ -519,3 +519,55 @@ Fake log file for testing 🧪🧪🧪
     <img src="https://i.imgur.com/0kqfHGC.png" alt="Header" >
   </a>
 </p>
+
+
+## Get Asignment by email
+```python
+@assignments.route("/get_assignment/<driver_email>", methods=['GET'])
+def get_assignment_driver(driver_email):
+    try:
+        assignments = get_driver_assignments(driver_email)
+        if assignments:
+            print(f"{driver_email} assignments successfully obtained")        
+            return jsonify(success = True, data=assignments), 200
+        else:
+            return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False, message='Something has gone wrong!'), 400
+```
+endpoint for testing 🧪🧪🧪
+```python
+http://localhost:5022/assignments/get_assignment/aldo.matus@envioclick.com
+```
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/0a0Uzrs.png" alt="Header" >
+  </a>
+</p>
+
+
+## PUT cancel assignment
+```python
+@assignments.route("/cancel_assignment/<driver_email>/<VIN>", methods=['PUT'])
+def cancel_assignment_driver(driver_email, VIN):
+    try:
+        assignments = cancel_driver_assignments(driver_email, VIN)
+        if assignments:
+            print(f"Assignment {driver_email} and {VIN} canceled")        
+            return jsonify(success = True, assignment_canceled = assignments), 200
+        else:
+            return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False, message='something has gone wrong!'), 400
+```
+endpoint for testing 🧪🧪🧪
+```python
+http://localhost:5022/assignments/cancel_assignment/aldomatusm111@gmail.com/1HGBH41JXMN109122
+```
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/knamu47.png" alt="Header" >
+  </a>
+</p>
