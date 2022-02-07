@@ -12,9 +12,9 @@ def post_assignment():
             if assignment[1]:
                 e = get_assignment_expedient(assignment[0]['driver_id'], assignment[0]['vehicle_id']) 
                 print(f'Assignment with driver: {str(e.driver_id)} and {str(e.vehicle_id)} has been created')        
-                return jsonify(success = True, message=f"assignment with driver: {assignment[0]['driver_id']} and vehicle: {assignment[0]['vehicle_id']} has been registered"), 201
+                return jsonify(success = True, message=f"Assignment with driver: {assignment[0]['driver_id']} and vehicle: {assignment[0]['vehicle_id']} has been registered"), 201
             else:
-                return jsonify(success=False, message=f"assignment with driver: {request.get_json()['driver_email']} and vehicle: {request.get_json()['VIN']}is already registered"), 409
+                return jsonify(success=False, message=f"Assignment with driver: {request.get_json()['driver_email']} and vehicle: {request.get_json()['VIN']}is already registered"), 409
     except Exception as e:
         print(e)
         return jsonify(success=False), 400
@@ -31,7 +31,7 @@ def get_assignment_driver(driver_email):
             return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
     except Exception as e:
         print(e)
-        return jsonify(success=False, message='something has gone wrong!'), 400
+        return jsonify(success=False, message='Something has gone wrong!'), 400
 
 
 @assignments.route("/cancel_assignment/<driver_email>/<VIN>", methods=['PUT'])

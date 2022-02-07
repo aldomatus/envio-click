@@ -16,7 +16,7 @@ def create_app():
 
     @app.route("/ping", methods=['GET'])
     def ping():
-        return jsonify(success=True,response="pong!"), 200
+        return jsonify(success=True,message='Welcome to Envio Click ® API'), 200
     
     @app.errorhandler(Exception)
     def handle_exception(e):
