@@ -186,8 +186,388 @@ Link to visit postman website: - [Link](https://www.postman.com/downloads/)
 </div>
 
 
+### Prerequisites
+For this project you need to have Docker and Docker installed
+
+<ol>
+<li>Link to install Docker engine:</li>
+<a href="https://docs.docker.com/engine/install/ubuntu/">Linux</a>
+<a href="https://docs.docker.com/engine/install/">  -  Windows or Mac</a>
+
+<li>After installing docker engine install docker compose</li>
+<a href="https://docs.docker.com/compose/install/">Linux Windows Mac</a>
+</li>
+
+
+### Aplicación para gestionar una flota de vehículos 🚚📦
+<div align="center">
+ <img src=https://blog.llerandi.com/hubfs/flota%20de%20vehiculos.jpg width=500 alt="Header" >
+</div>
+
+#### Entity relationship model
+
+<div align="center">
+ <img src=https://i.imgur.com/FmXAdqu.png width="800" alt="Header" >
+  </div>
+
+For the construction of the database, the relationship entity model was made with which the relationships between each table were deduced. 
+<div align="center">
+ <img src=https://i.imgur.com/63jXTbK.png width=1000 alt="Header" >
+</div>
+
+
+Para la construccion de la base de datos se tomaron en cuenta los siguientes aspectos:
+* Las principales entidades a guardar seran: vehiculos, conductores y asignaciones
+* Se elaborá una tabla para cada entidad
+* La tabla que hará las relaciones entre conductores y vehiculos será la tabla de asignaciones por lo que contendrá las llaves foraneas de cada entidad
+* Un conductor puede tener asignado varios autos pero un auto puede estar asignado a un solo conductor
+
+##### Tabla drivers
+<div align="center">
+ <img src=https://i.imgur.com/UovtKxz.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType que será la llave con la que relacionaremos con los vehiculos a cada conductor
+* El email empresarial del conductor será una llave unica que lo identificará junto a su id (Elegiremos el email por su facilidad de memorizar y manejar) 
+* Tendremos un valor único que es el Número de Identificación Vehicular VIN (Vehicle Identification Number) consta de 17 caracteres alfanuméricos 
+* La tabla contendrá otros datos del conductor como nombre, fecha de nacimiento (dob), tipo de crdencial con la que cuenta, telefono etc.
+
+
+##### Tabla vehicles
+<div align="center">
+ <img src=https://i.imgur.com/Bwy81FS.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType que será la llave con la que relacionaremos con los conductores a cada vehiculo
+* Tendremos un valor único que es el Número de Identificación Vehicular VIN (Vehicle Identification Number) consta de 17 caracteres alfanuméricos 
+* La tabla contendrá otros datos del vehiculo como: marca, modelo, maxima carga permitida, tipo de vehiculo y otras
+
+
+##### Tabla assignments
+<div align="center">
+ <img src=https://i.imgur.com/1pRaSu1.png width=400 alt="Header" >
+</div>
+
+Descripción:
+* La llave primaria será un objeto de tipo UUIDType 
+* Relacionaremos dos llaves foraneas (llave foranea de vehicle y driver)
+* Las asignaciones son unicas es decir no se puede repetir una asignacion con mismo id de vehiculo y driver
+* La tabla contendrá otros datos de la asignacion como: fecha, si ya ha expirado, notas, área etc.
+
+### Installation 🖥
+
+1. To obtain my repository you must create a folder in a desired directory and within this folder open a terminal or use cmd in the case of windows.
+2. Clone the repo
+   ```
+   git clone git@github.com:aldomatus/envio-click.git
+   
+   ```
+3. Move to envio_click directory
+   ```
+   cd envio_click/A/A2
+   
+   ```
+4. Build Docker container
+   ```
+   docker build -t fleet_local:local_latest . ;
+   ```
+   
+4. Build Docker container
+   ```
+   docker build -t fleet_local:local_latest . ;
+   ```
+   
+5. Run Docker container
+   ```
+   docker run --rm -d -it --env-file=.env -v ${PWD}:/usr/src/app -p 5022:5000 --name fleet_local fleet_local:local_latest;
+   ```
+6. To see the logs at runtime
+   ```
+   docker logs -f fleet_local;
+   ```
+
+7. If all goes well, our application should already be executing the app.py file with python using the mysql database, now we just have to check by entering the following link in our browser:
+
+   ```
+   http://localhost:5000/
+   ```
+8. You should have a response like this:
+   ```
+   {
+	"message": "Welcome to Envio Click ® API",
+	"success": true
+   }
+   ```
+ ## Description of the files 💼 🐳
+ 
+ ### requirements.txt
+ ```python
+Flask
+flask-sqlalchemy
+mysql-connector
+alembic
+sqlalchemy-utils
+pytz
+werkzeug
+unidecode
+requests
+gunicorn
+newrelic
+```
+### Dockerfile 🐳
+Create the dockerfile that will have the necessary instructions to create a Python image that will later be converted into a single application.
+- we add our environment variables from flask
+- We run the requirements file so that our libraries are installed
+- We expose the port to use which is 5000
+- With CMD we start Flask 
+```docker
+  
+FROM python:3.8.5-slim-buster
+
+RUN apt install tzdata
+RUN cp /usr/share/zoneinfo/America/Mexico_City /etc/localtime
+RUN echo "America/Mexico_City" >  /etc/timezone
+RUN apt-get -y update \
+    && apt-get install -y \
+        libffi-dev \
+        libgdk-pixbuf2.0-0 \
+        libpango1.0-0 \
+        python-dev \
+        python-lxml \
+        shared-mime-info \
+        libcairo2 \
+    && apt-get -y clean
+
+WORKDIR /usr/src/app
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY requirements.txt /usr/src/app/requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . /usr/src/app
+
+ENTRYPOINT ["/bin/sh","/usr/src/app/entrypoint.sh"]
+```
+
+### .env file 🌍
+This file contains our environment variables that will be read by the dockerfile. 
+
+```
+FLASK_APP=app/__init__.py
+FLASK_ENV=development
+SECRET_KEY=
+FLASK_DEBUG=1
+
+SESSION_COOKIE_NAME=aldomatus_
+
+SQLALCHEMY_ECHO=False
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+
+SQLALCHEMY_DATABASE_URI=mysql+mysqlconnector://<user>:<password>@<ip>/fleet
+SQLALCHEMY_DATABASE_URI_ALEMBIC=mysql+mysqlconnector://<user>:<password>@<ip>/fleet
+
+NEW_RELIC_CONFIG_FILE=newrelic.ini
+NEW_RELIC_MONITOR_MODE=false
+```
+
+#### Use of Blueprints
+Blueprints: they are a series of routes that we can integrate into our application but in another directory that is, it will allow me to modulate the application into small applications that do specific things such as authentication or the welcome part, or if we have a task dashboard for Example we would also create a blueprint for the specific tasks and it is easier to handle.
+
+- The blue squares represent folders and the yellow figures are the files
+
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://raw.githubusercontent.com/innacroft/Apptask/master/app/static/images/estructura_carpetas.PNG" alt="Header" >
+  </a>
+</p>
+ 
+
+<!-- USAGE EXAMPLES -->
+## Usage
+<!-- EXPLAIN CODE -->
+### Description of the REST API code
+With this base you can make any flask code, modify the API and adapt it to your projects. It is important that you study the docker code to understand what is behind each file in both the Docker
+
+## Driver register
+```python
+@drivers.route("/", methods=['POST'])
+def post_driver():
+    try:
+        if request.get_json():
+            if create_driver_expedient(request.get_json()):
+                e = get_driver_expedient(request.json['email'])
+                message = f'Driver {e.email} has been created'
+                print(message)        
+                return jsonify(success=True,message=message), 201
+            else:
+                return jsonify(success=False, message=f"Driver {request.json['email']} is already registered"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False), 400
+```
+Fake log file for testing 🧪🧪🧪
+```python
+{
+"name": "Ricardo",
+"first_lastname":"Montaño",
+"second_lastname":"García",
+"email":"ricardo.m@gmail.com",
+"phone":"9512377979",
+"credential_type":"C",
+"dob": "1990-01-12"
+}
+```
+#### Drivers loaded in database
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/4UlZBtI.png" alt="Header" >
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/brxRC5j.png" alt="Header" >
+  </a>
+</p>
 
 
 
 
+## Vehicles register
+```python
+@vehicles.route("/", methods=['POST'])
+def post_vehicle():
+    try:
+        if request.get_json():
+            if create_vehicle_expedient(request.get_json()):
+                e = get_vehicle_expedient(request.json['VIN']) 
+                print(f'Vehicle register {e.VIN} has been created')        
+                return jsonify(success=True, VIN_vehicle=e.VIN), 201
+            else:
+                return jsonify(success=False, message=f"Vehicle {request.json['VIN']} is already registered"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False), 400
+```
+Fake log file for testing 🧪🧪🧪
+```python
+{
+"model": "AX100",
+"brand": "SUZUKI",
+"vehicle_type": "Motorcycle",
+"maximum_laded_weight": 20,
+"VIN":"1HGBR41JXMM109125"
+}
+```
+#### Drivers loaded in database
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/BQZDzMA.png" alt="Header" >
+  </a>
+</p>
 
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/qwmOdx1.png" alt="Header" >
+  </a>
+</p>
+
+
+
+## Asignments register
+```python
+@assignments.route("/", methods=['POST'])
+def post_assignment():
+    try:
+        if request.get_json():
+            assignment = create_assignment_expedient(request.get_json())
+            if assignment[1]:
+                e = get_assignment_expedient(assignment[0]['driver_id'], assignment[0]['vehicle_id']) 
+                print(f'Assignment with driver: {str(e.driver_id)} and {str(e.vehicle_id)} has been created')        
+                return jsonify(success = True, message=f"Assignment with driver: {assignment[0]['driver_id']} and vehicle: {assignment[0]['vehicle_id']} has been registered"), 201
+            else:
+                return jsonify(success=False, message=f"Assignment with driver: {request.get_json()['driver_email']} and vehicle: {request.get_json()['VIN']}is already registered"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False), 400
+```
+Fake log file for testing 🧪🧪🧪
+```python
+{
+
+"VIN": "1HGBR41JXMM109125",
+"driver_email":"aldo.matus@envioclick.com",
+"notes": "Tecnologia",
+"area":"Monterrey",
+"expiration_date": "2022-03-13",
+"is_expired": false
+				
+}
+```
+#### Drivers loaded in database
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/q1gueEt.png" alt="Header" >
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/0kqfHGC.png" alt="Header" >
+  </a>
+</p>
+
+
+## Get Asignment by email
+```python
+@assignments.route("/get_assignment/<driver_email>", methods=['GET'])
+def get_assignment_driver(driver_email):
+    try:
+        assignments = get_driver_assignments(driver_email)
+        if assignments:
+            print(f"{driver_email} assignments successfully obtained")        
+            return jsonify(success = True, data=assignments), 200
+        else:
+            return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False, message='Something has gone wrong!'), 400
+```
+endpoint for testing 🧪🧪🧪
+```python
+http://localhost:5022/assignments/get_assignment/aldo.matus@envioclick.com
+```
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/0a0Uzrs.png" alt="Header" >
+  </a>
+</p>
+
+
+## PUT cancel assignment
+```python
+@assignments.route("/cancel_assignment/<driver_email>/<VIN>", methods=['PUT'])
+def cancel_assignment_driver(driver_email, VIN):
+    try:
+        assignments = cancel_driver_assignments(driver_email, VIN)
+        if assignments:
+            print(f"Assignment {driver_email} and {VIN} canceled")        
+            return jsonify(success = True, assignment_canceled = assignments), 200
+        else:
+            return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
+    except Exception as e:
+        print(e)
+        return jsonify(success=False, message='something has gone wrong!'), 400
+```
+endpoint for testing 🧪🧪🧪
+```python
+http://localhost:5022/assignments/cancel_assignment/aldomatusm111@gmail.com/1HGBH41JXMN109122
+```
+<p align="center">
+  <a href="https://github.com/aldomatus/python_rest_api_mysql_docker">
+    <img src="https://i.imgur.com/knamu47.png" alt="Header" >
+  </a>
+</p>
