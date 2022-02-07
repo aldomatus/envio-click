@@ -41,10 +41,10 @@ dictionary_of_levels = {
         "Sixteen": 16, "Seventeen": 17, "Eighteen": 18, "Nineteen": 19,
       }
 new_dict = {}
-for key, value in dictionary_of_levels.items():
-    new_dict[value] = key
+# for key, value in dictionary_of_levels.items():
+#     new_dict[value] = key
 
-print(new_dict)
+# print(new_dict)
 
 
 dictionary_of_levels2 = {
