@@ -1,4 +1,6 @@
 docker stop fleet_local; docker build -t fleet_local:local_latest . ; docker run --rm -d -it --env-file=.env -v ${PWD}:/usr/src/app -p 5022:5000 --name fleet_local fleet_local:local_latest; docker logs -f fleet_local;
 
 # To run test
-docker exec -it fleet_local python -m unittest api_test.py 
+docker exec -it fleet_local python -m unittest api_test.py; 
+docker exec -it fleet_local python -m unittest api_assignments_test.py 
+docker exec -it fleet_local python -m unittest api_assignment_cancel_test.py 
