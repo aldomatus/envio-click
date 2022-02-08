@@ -9,3 +9,4 @@ unidecode
 requests
 gunicorn
 newrelic
+unittest2

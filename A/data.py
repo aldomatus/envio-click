@@ -1,6 +1,6 @@
 dictionary3 = {
     "DataA": {
-                "name": "Aldo",
+                "name": "One nameA",
                 "Level": "One",
                 "Priority": "Highest",
 
@@ -18,6 +18,13 @@ dictionary3 = {
                                         "name": "One nameSubdataAA",
                                         "Level": "One",
                                         "Priority": "Highest",
+                                        
+                                        "SubdataAAA": {
+                                                        "name": "One nameSubdataAAA",
+                                                        "Level": "One",
+                                                        "Priority": "Highest",
+                                                        
+                                                     }
                                         }
                              }
     },

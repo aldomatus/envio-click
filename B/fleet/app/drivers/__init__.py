@@ -1,8 +1,11 @@
-from email import message
+import datetime
+import pytz
 from flask import Blueprint, request, jsonify
 from app.drivers.controllers import create_driver_expedient, get_driver_expedient
 
 drivers = Blueprint('drivers', __name__, url_prefix='/drivers')
+
+tz = pytz.timezone('America/Mexico_City')
 
 @drivers.route("/", methods=['POST'])
 def post_driver():
