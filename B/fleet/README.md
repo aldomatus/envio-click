@@ -1,12 +1,10 @@
-# Caterpie
+# Vehicle Fleet
 
-<div style="text-align:center"><img src="https://img.pokemondb.net/artwork/vector/large/caterpie.png" width="250"/></div>
+<div style="text-align:center"><img src="https://1.bp.blogspot.com/-RetvqN6I-wU/YKvDoCYDlHI/AAAAAAAAShc/4NkBNcvLpK8UCS14kTDx7Flx1TxhhLBCgCLcBGAsYHQ/s800/ZF-Vehiculos-Comerciales-Ligeros.jpg" width="250"/></div>
 
 Caterpie es un repositorio bootstrap para iniciar proyectos / microservicios con Flask y Docker.
 
 Permite inicializar con la estructura básica un proyecto con Flask + SQLAlchemy + Alembic + MySQL.
-
-### *NO usa docker-compose*
 
 ## Uso
 
