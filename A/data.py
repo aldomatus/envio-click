@@ -1,6 +1,6 @@
-dictionary = {
+dictionary3 = {
     "DataA": {
-                "name": "One nameA",
+                "name": "Aldo",
                 "Level": "One",
                 "Priority": "Highest",
 
@@ -32,8 +32,54 @@ dictionary = {
                         "Level": "One",
                         "Priority": "Highest",
                     }
+        },
+
+    "DataC": {
+            "name": "One nameC",
+            "Level": "Three",
+            "Priority": "Highest",
+            "SubdataC":
+                    {
+                        "name": "One nameSubdataC",
+                        "Level": "One",
+                        "Priority": "Highest",
+                    }
         }
 }
+
+dictionary2 = {
+        "DataA": {
+                "name": "One nameA", 
+                "Level": 1, 
+                "Priority": "Highest", 
+                
+                "SubdataA": {"name": "One nameSubdataA", 
+                             "Level": 1, 
+                             "Priority": "Highest"
+                            }, 
+                
+                "SubdataA2": {"name": "One nameSubdataA2", 
+                              "Level": 2, 
+                              "Priority": "High", 
+                              
+                              "SubdataAA": {
+                                            "name": "One nameSubdataAA", 
+                                            "Level": 1, 
+                                            "Priority": "Highest"
+                                            }
+                             }
+                }, 
+        "DataB": {
+                "name": "One nameB", 
+                "Level": 2, 
+                "Priority": "Highest", 
+                
+                "SubdataB": {"name": "One nameSubdataB", 
+                             "Level": 1, 
+                             "Priority": "Highest"
+                             }
+                }
+              }
 
 dictionary_of_levels = {
         "Zero": 0, "One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5, "Six": 6, "Seven": 7, "Eight": 8,
