@@ -1,10 +1,8 @@
 # Vehicle Fleet
 
-<div style="text-align:center"><img src="https://1.bp.blogspot.com/-RetvqN6I-wU/YKvDoCYDlHI/AAAAAAAAShc/4NkBNcvLpK8UCS14kTDx7Flx1TxhhLBCgCLcBGAsYHQ/s800/ZF-Vehiculos-Comerciales-Ligeros.jpg" width="250"/></div>
+<div style="text-align:center"><img src="https://1.bp.blogspot.com/-RetvqN6I-wU/YKvDoCYDlHI/AAAAAAAAShc/4NkBNcvLpK8UCS14kTDx7Flx1TxhhLBCgCLcBGAsYHQ/s800/ZF-Vehiculos-Comerciales-Ligeros.jpg" width="400"/></div>
 
-Caterpie es un repositorio bootstrap para iniciar proyectos / microservicios con Flask y Docker.
-
-Permite inicializar con la estructura básica un proyecto con Flask + SQLAlchemy + Alembic + MySQL.
+Microservicio para el control de asignaciones de vehiculos y choferes de una flota de vehiculos
 
 ## Uso
 
@@ -18,13 +16,13 @@ docker build -t image:version .
 
 Windows:
 ```
-docker run --rm -it --env-file=.env -v ${PWD}:/usr/src/app -p 5000:5000 --name caterpie contenedor image:version
+docker run --rm -it --env-file=.env -v ${PWD}:/usr/src/app -p 5000:5000 --name fleet_container image:version
 ```
 *NIX:
 ```
-docker run --rm -it --env-file=.env -v $(pwd):/usr/src/app -p 5000:5000 --name caterpie contenedor image:version
+docker run --rm -it --env-file=.env -v $(pwd):/usr/src/app -p 5000:5000 --name fleet_container image:version
 ```
 
 ## Licencia
 
-2021
+2022
