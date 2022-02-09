@@ -690,3 +690,175 @@ http://localhost:5022/assignments/cancel_assignment/aldomatusm111@gmail.com/1HGB
     <img src="https://i.imgur.com/knamu47.png" alt="Header" >
   </a>
 </p>
+
+## Test unitarios 📝🧪
+Se crearon test para los endpoints de creacion [POST] de obtención de datos [GET] y edición de datos [PUT].
+
+### Test de creación de registros [POST]
+En este primer test nos aseguramos de la creación de un driver y un vehicle (un chofer y un vehículo) 🚚🧔
+```python
+import unittest
+import requests
+class ApiTest(unittest.TestCase):
+    API_URL = "http://172.17.0.1:5022"
+    DRIVERS_URL = "{}/drivers/".format(API_URL)
+    VEHICLES_URL = "{}/vehicles/".format(API_URL)
+    ASSIGNMENTS_URL = "{}/assignments/".format(API_URL)
+
+    DRIVER_OBJ = {
+	    "name": "Usertest",
+        "first_lastname": "lastnameTest",
+        "second_lastname": "lastnameTest",
+        "email": "test@envioclick.com",
+        "phone": "000000000",
+        "credential_type": "C",
+		"dob": "1990-01-01"
+                }
+    
+    VEHICLE_OBJ = {
+        "model": "Testmodel",
+        "brand": "Testbrand",
+        "vehicle_type": "TestType",
+        "maximum_laded_weight": 20,
+        "VIN":"TESTR41JXMM109125"
+                }
+
+
+    def test_create_driver(self):
+        r = requests.post(ApiTest.DRIVERS_URL, json=ApiTest.DRIVER_OBJ)
+        self.assertEqual(r.status_code, 201)
+
+
+    def test_create_vehicle(self):
+        r = requests.post(ApiTest.VEHICLES_URL, json=ApiTest.VEHICLE_OBJ)
+        self.assertEqual(r.status_code, 201)    
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+### Test de creación de asignaciones [POST] 📝
+En este primer test nos aseguramos de la creación de un driver y un vehicle (un chofer y un vehículo) 
+```python
+import unittest
+import requests
+import time
+class ApiTest(unittest.TestCase):
+    API_URL = "http://172.17.0.1:5022"
+    ASSIGNMENTS_URL = "{}/assignments/".format(API_URL)
+    
+    ASSIGNMENTS_OBJ = {
+
+        "VIN": "TESTR41JXMM109125",
+        "driver_email":"test@envioclick.com",
+        "notes": "Test",
+        "area":"TestArea",
+        "expiration_date": "2022-03-13",
+        "is_expired": False
+				}
+
+
+    def test_create_assignments(self):
+        r = requests.post(ApiTest.ASSIGNMENTS_URL, json=ApiTest.ASSIGNMENTS_OBJ)
+        self.assertEqual(r.status_code, 201)
+        
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+### Test de cancelación de asignaciones [POST] 📝
+En este primer test nos aseguramos de la creación de un driver y un vehicle (un chofer y un vehículo) 
+```python
+import unittest
+import requests
+import time
+
+
+class ApiTest(unittest.TestCase):
+    API_URL = "http://172.17.0.1:5022"
+    ASSIGNMENTS_URL = "{}/assignments/".format(API_URL)
+    DRIVER_EMAIL = 'test@envioclick.com'
+    VEHICLE_VIN = 'TESTR41JXMM109125'
+
+
+    def test_cancel_assignments(self):
+        CANCEL_DRIVER_ASSIGNMENTS = "{}cancel_assignment/{}/{}".format(ApiTest.ASSIGNMENTS_URL, ApiTest.DRIVER_EMAIL, ApiTest.VEHICLE_VIN)
+        r = requests.put(CANCEL_DRIVER_ASSIGNMENTS)
+        self.assertEqual(r.status_code, 200)
+
+
+if __name__ == '__main__':
+    unittest.main()
+  ```  
+## C2 Qué mejora harías en los ejercicios A y B ✅
+
+Para el ejercicio B hice la mejora de cron, en el que instalé un cron en el contenedor de Docker para eliminar los eventos expirados en los que la fecha a partir del hoy han expirado, este cron se ejecutaría cada día.
+
+Se instalan las librerias en el kernel 🐳:
+```python
+RUN apt-get -y update \
+    && apt-get install -y \
+        libffi-dev \
+        libgdk-pixbuf2.0-0 \
+        libpango1.0-0 \
+        python-dev \
+        python-lxml \
+        shared-mime-info \
+        libcairo2 \
+        cron \
+        rsyslog \
+```
+
+### Se escriben los comandos para ejectar el cron 🐳
+```python
+ADD events-cron /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/hello-cron
+RUN crontab /etc/cron.d/hello-cron
+RUN touch /var/log/cron.log
+
+RUN chmod +x /usr/src/app/entrypoint.sh
+```
+
+
+### Agregamos el cli command para ejecutar la funcion de flask con el cron 🕒
+```python
+@assignments.cli.command("update_expired_assignments")
+def update_expired_event():
+    print('[{}] Start updating expired assignments'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))
+    if update_expired_assignments():
+        print('[{}] End updating expired assignments'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))
+    else:
+        print('[{}] Something has gone wrong!'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))
+```
+
+
+
+
+### Función para expirar asignaciones 🆑
+La funcion nos trae las asignaciones con fechas pasadas a la de hoy y con el is_expired = False para marcarlas como expiradas (is_expired = True)
+```python
+def update_expired_assignments():
+    try:
+        assignments = db_session.query(Assignment).filter(and_(Assignment.expiration_date < datetime.datetime.now(tz=tz).replace(tzinfo=None), Assignment.is_expired==0)).all()
+        if assignments:              
+            for assignment in assignments:
+                print(f'Expired assignment: {assignment.driver_id} {assignment.vehicle_id} | {assignment.expiration_date}')
+                assignment.is_expired = True
+        db_session.commit()
+        return True
+
+    except Exception as e:
+        print('No expired assignments | ', e)
+        return None
+```
+
+
+
+### Por ultimo creamos el cron 🕒
+```python
+SHELL=/bin/bash
+BASH_ENV=/root/project_env.sh
+# Update the expired assignments every day
+0 3 * * * root cd /usr/src/app && /usr/local/bin/flask assignments update_expired_assignments >> /var/log/cron.log 2>&1
+```
