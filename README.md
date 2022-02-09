@@ -206,6 +206,50 @@ palabra o párrafo:
 * Reemplazar las vocales por la vocal consecutiva (ejemplo: “hacer” se cambia a
 “hecir”).
 
+```python
+def vowel_counter(my_string):
+    counter = 0
+    for letter in my_string:
+        if letter in 'aeiouAEIOU':
+            counter += 1
+    return counter
+
+
+def change_vowels(my_string):
+    new_string = ''
+    vowels = ('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
+    for letter in my_string:
+        if letter in vowels:
+            index = 0
+            for vowel in vowels:
+                if vowel == letter:
+                    break
+                index += 1
+            try:
+                if letter == 'u':
+                    new_string += 'a'
+                else:
+                    new_string += vowels[index + 1]
+            except IndexError:
+                new_string += vowels[5]
+
+        else:
+            new_string += letter
+    return new_string
+
+
+if __name__ == '__main__':
+    my_string = str(input("Enter your string: "))
+    print(f'Your string has {vowel_counter(my_string)} vowels')
+
+    my_new_string = (change_vowels(my_string))
+    print(f'Your changed string: {my_new_string}')
+```
+### Flake8 
+<div align="center">
+ <img src=https://i.imgur.com/emNgtg8.png width=800 alt="Header" >
+</div>
+
 #### A2
 Sin hacer uso de librerías o funciones nativas. Escribe un programa el cual tomando un
 conjunto de datos con sus atributos (Figura A):
@@ -791,6 +835,14 @@ class ApiTest(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
   ```  
+  ### Comandos de Docker para correr los Tests 🐳
+  ```python
+docker exec -it fleet_local python -m unittest api_test.py; 
+docker exec -it fleet_local python -m unittest api_assignments_test.py 
+docker exec -it fleet_local python -m unittest api_assignment_cancel_test.py 
+  ```
+  
+  
 ## C2 Qué mejora harías en los ejercicios A y B ✅
 
 Para el ejercicio B hice la mejora de cron, en el que instalé un cron en el contenedor de Docker para eliminar los eventos expirados en los que la fecha a partir del hoy han expirado, este cron se ejecutaría cada día.
@@ -854,7 +906,6 @@ def update_expired_assignments():
 ```
 
 
-
 ### Por ultimo creamos el cron 🕒
 ```python
 SHELL=/bin/bash
@@ -862,3 +913,38 @@ BASH_ENV=/root/project_env.sh
 # Update the expired assignments every day
 0 3 * * * root cd /usr/src/app && /usr/local/bin/flask assignments update_expired_assignments >> /var/log/cron.log 2>&1
 ```
+
+### Comando de Docker para correr la función del cron 🐳
+```python
+docker exec -it fleet_local flask assignments update_expired_assignments
+```
+
+# Gracias por leerme 😊
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/envioclickFeature`)
+3. Commit your Changes (`git commit -m 'Add some envioclickFeature'`)
+4. Push to the Branch (`git push origin feature/envioclickFeature`)
+5. Open a Pull Request
+
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Aldo Matus - [Linkedin](https://www.linkedin.com/in/aldomatus/) [Facebook](https://www.facebook.com/aldo.matusmartinez/)
+
+Project Link: [Repository](https://github.com/aldomatus/envio-click)
