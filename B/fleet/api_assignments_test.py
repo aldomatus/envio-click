@@ -1,8 +1,6 @@
 import unittest
 import requests
 import time
-
-
 class ApiTest(unittest.TestCase):
     API_URL = "http://172.17.0.1:5022"
     ASSIGNMENTS_URL = "{}/assignments/".format(API_URL)
@@ -17,11 +15,16 @@ class ApiTest(unittest.TestCase):
         "is_expired": False
 				}
 
-    DRIVER_EMAIL = 'test@envioclick.com'
-    VEHICLE_VIN = 'TESTR41JXMM109125'
+    DRIVER_EMAIL = 'aldo.matus@envioclick.com'
 
-    def test_create_assignments(self):
-        r = requests.post(ApiTest.ASSIGNMENTS_URL, json=ApiTest.ASSIGNMENTS_OBJ)
+
+    def test_create_driver(self):
+        r = requests.post(ApiTest.DRIVERS_URL, json=ApiTest.DRIVER_OBJ)
+        self.assertEqual(r.status_code, 201)
+
+
+    def test_create_vehicle(self):
+        r = requests.post(ApiTest.VEHICLES_URL, json=ApiTest.VEHICLE_OBJ)
         self.assertEqual(r.status_code, 201)
 
 
@@ -29,12 +32,15 @@ class ApiTest(unittest.TestCase):
         GET_DRIVER_ASSIGNMENTS = "{}get_assignment/{}".format(ApiTest.ASSIGNMENTS_URL, ApiTest.DRIVER_EMAIL)
         r = requests.get(GET_DRIVER_ASSIGNMENTS)
         self.assertEqual(r.status_code, 200)
+    
+    time.sleep(5) # Esperar 2 segundos para guardar los registros de driver y vehicle
 
 
-    def test_cancel_assignments(self):
-        CANCEL_DRIVER_ASSIGNMENTS = "{}cancel_assignment/{}/{}".format(ApiTest.ASSIGNMENTS_URL, ApiTest.DRIVER_EMAIL, ApiTest.VEHICLE_VIN)
-        r = requests.put(CANCEL_DRIVER_ASSIGNMENTS)
-        self.assertEqual(r.status_code, 200)
+
+class ApiAssignmentsTest(unittest.TestCase):
+    def test_create_assignments(self):
+        r = requests.post(ApiTest.ASSIGNMENTS_URL, json=ApiTest.ASSIGNMENTS_OBJ)
+        self.assertEqual(r.status_code, 201)
 
 
 if __name__ == '__main__':

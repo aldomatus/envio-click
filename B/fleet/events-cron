@@ -1,0 +1,4 @@
+SHELL=/bin/bash
+BASH_ENV=/root/project_env.sh
+# Update the expired assignments every day
+* * * * * root cd /usr/src/app && /usr/local/bin/flask assignments update_expired_assignments >> /var/log/cron.log 2>&1

@@ -1,6 +1,16 @@
-from email import message
+
+import datetime
+import pytz
+tz = pytz.timezone('America/Mexico_City')
+
 from flask import Blueprint, request, jsonify
-from app.assignments.controllers import create_assignment_expedient, get_assignment_expedient, get_driver_assignments, cancel_driver_assignments
+from app.assignments.controllers import (
+    create_assignment_expedient, 
+    get_assignment_expedient, 
+    get_driver_assignments, 
+    cancel_driver_assignments,
+    update_expired_assignments
+)
 
 assignments = Blueprint('assignments', __name__, url_prefix='/assignments')
 
@@ -45,4 +55,13 @@ def cancel_assignment_driver(driver_email, VIN):
             return jsonify(success=False, message=f"Driver {driver_email} has no assigned vehicles"), 409
     except Exception as e:
         print(e)
-        return jsonify(success=False, message='something has gone wrong!'), 400
+        return jsonify(success=False, message='Something has gone wrong!'), 400
+
+
+@assignments.cli.command("update_expired_assignments")
+def update_expired_event():
+    print('[{}] Start updating expired assignments'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))
+    if update_expired_assignments():
+        print('[{}] End updating expired assignments'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))
+    else:
+        print('[{}] Something has gone wrong!'.format(datetime.datetime.now(tz=tz).strftime("%d/%m/%Y %H:%M:%S")))

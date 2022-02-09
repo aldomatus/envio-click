@@ -4,3 +4,6 @@ docker stop fleet_local; docker build -t fleet_local:local_latest . ; docker run
 docker exec -it fleet_local python -m unittest api_test.py; 
 docker exec -it fleet_local python -m unittest api_assignments_test.py 
 docker exec -it fleet_local python -m unittest api_assignment_cancel_test.py 
+
+# To run cron
+docker exec -it fleet_local flask assignments update_expired_assignments

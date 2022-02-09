@@ -12,6 +12,8 @@ RUN apt-get -y update \
         python-lxml \
         shared-mime-info \
         libcairo2 \
+        cron \
+        rsyslog \
     && apt-get -y clean
 
 WORKDIR /usr/src/app
@@ -22,5 +24,12 @@ COPY requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /usr/src/app
+
+ADD events-cron /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/hello-cron
+RUN crontab /etc/cron.d/hello-cron
+RUN touch /var/log/cron.log
+
+RUN chmod +x /usr/src/app/entrypoint.sh
 
 ENTRYPOINT ["/bin/sh","/usr/src/app/entrypoint.sh"]

@@ -94,3 +94,18 @@ def cancel_driver_assignments(driver_email, VIN):
            }
 
     return (data)
+
+
+def update_expired_assignments():
+    try:
+        assignments = db_session.query(Assignment).filter(and_(Assignment.expiration_date < datetime.datetime.now(tz=tz).replace(tzinfo=None), Assignment.is_expired==0)).all()
+        if assignments:              
+            for assignment in assignments:
+                print(f'Expired assignment: {assignment.driver_id} {assignment.vehicle_id} | {assignment.expiration_date}')
+                assignment.is_expired = True
+        db_session.commit()
+        return True
+
+    except Exception as e:
+        print('No expired assignments | ', e)
+        return None
