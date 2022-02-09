@@ -52,47 +52,66 @@ def addData(key_name, value, route):
         route_length = len(route)
 
         dictionary = dictionary3
-
-        key_counter = 1
+        key_counter = 0
+        save_route = str(f'dictionary')
         for key in dictionary.keys():
             ak = '[key]' 
             k = '[key]'
-            save_route = str(f'dictionary[{key}]')
-            counter = 1
-            for number_layer_1 in range(0, len(dictionary)-1):
-                if dictionary[key].get('Level', 0) == route[number_layer_1] if number_layer_1 < len(route) else -1 and route_length == 1:
-                    if route_length == 1:
-                        dictionary[key][key_name] = value
 
-            for num in range(route_length):
+            break_out_flag_route_1 = False
+            pass_flag_key_not_found = False
+            break_out_flag_key1 = False
+            break_out_flag_route_nested = False
+
+            print(f"{dictionary[key].get('Level', 0)} == {route[0]} key_counter = {key_counter}")
+            if dictionary[key].get('Level', 0) == route[0]:
+                if route_length == 1:
+                    dictionary[key][key_name] = value
+                    break_out_flag_route_1 = True
+                else:
+                    break_out_flag_key1 = True
+                    save_route += str(f'["{key}"]')
+            else:
+                pass_flag_key_not_found = True
+
+            if break_out_flag_route_1 == True:
+                break
+            if pass_flag_key_not_found == True:
+                continue
+
+
+            for num in range(1, route_length):
                 
-                counter+=1
                 if num+1 >= 2:
                     ak += f'[key{num}]'
                 if num+1 > 2:
                     k += f'[key{num-1}]'
-
+                names = []
                 code = f"""for key{num} in dictionary{k}.keys():
                             subdata_number = sum(1 if type(x) == dict else 0 for x in dictionary{k}.values())
                             if type(dictionary{ak}) == dict:
-
-                                for number_layer_2 in range(subdata_number):
-                                    print('number_layer_2', number_layer_2)
-                                    if route[number_layer_2] == dictionary{ak}['Level'] and key_counter == number_layer_2:
-                                        save_route += str(f'[{{key{num}}}]')
-                                        print(save_route)
-                                        # dictionary{ak}['{key_name}'] = '{value}'
-                                        route[number_layer_2] = 0
-                                        break
+                                if route[{num}] == dictionary{ak}['Level']:
+                                    names.append(str(f'["{{key{num}}}"]'))
+                                    break  
+                            else:
+                                 break_out_flag_route_nested = True                                     
                             """
-                try:  
-                    print('\n\n\n\n')          
+                try:           
                     exec(code)
+                    for i in names:
+                        save_route += i
                 except Exception as e:
                     print(e)
                     break
+                if break_out_flag_route_nested:
+                    continue
+
             key_counter += 1
-        print(dictionary)
+            if break_out_flag_key1 == True:
+                break
+        addData1 = f'{save_route}["name"] = "{value}"'
+        print(addData1)
+        exec(addData1)
         print('Sending show2')
         show2(dictionary)
 
