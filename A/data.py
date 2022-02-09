@@ -1,3 +1,4 @@
+import os
 dictionary3 = {
     "DataA": {
                 "name": "One nameA",
@@ -93,11 +94,6 @@ dictionary_of_levels = {
         "Nine": 9, "Ten": 10, "Eleven": 11, "Twelve": 12, "Thirteen": 13, "Fourteen": 14, "Fifteen": 15,
         "Sixteen": 16, "Seventeen": 17, "Eighteen": 18, "Nineteen": 19,
       }
-new_dict = {}
-# for key, value in dictionary_of_levels.items():
-#     new_dict[value] = key
-
-# print(new_dict)
 
 
 dictionary_of_levels2 = {
@@ -105,6 +101,34 @@ dictionary_of_levels2 = {
         14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen', 18: 'Eighteen', 19: 'Nineteen'
                         }
 
+
 dictionary_of_priority = {
         "Lowest": 0, "Low": 1, "Medium": 2, "High": 3, "Highest": 4,
       }
+
+
+menu_options = {
+    1: 'Show dictionary',
+    2: 'Add a name',
+    3: 'Exit',
+}
+
+def print_menu():
+
+    print("""__________             _____      __________________      ______  
+___  ____/_________   ____(_)_______  ____/__  /__(_)________  /__
+__  __/  __  __ \_ | / /_  /_  __ \  /    __  /__  /_  ___/_  //_/
+_  /___  _  / / /_ |/ /_  / / /_/ / /___  _  / _  / / /__ _  ,<   
+/_____/  /_/ /_/_____/ /_/  \____/\____/  /_/  /_/  \___/ /_/|_|                       
+\n""")
+    for key in menu_options.keys():
+        print (key, '-', menu_options[key] )
+
+    while(True):
+        option = ''
+        try:
+            option = int(input('Enter your choice: '))
+            print('\n')
+        except:
+            print('Wrong input. Please enter a number ...')
+        return option

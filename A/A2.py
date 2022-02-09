@@ -1,14 +1,19 @@
-from data import dictionary3, dictionary_of_levels
+from data import dictionary_of_levels, print_menu
 import ast
+import os
 
-def show2(dictionary):
+def show(function):
+    with open(f'{os.getcwd()}/A/A2_2.txt', 'r+') as dictionary_read:
+        contents = dictionary_read.read()
+        dictionary = ast.literal_eval(contents)
+    print("""\n█████ █████ █████ █████ █████ █████ █████""")
     for key in dictionary.keys():
         print(key)
         ak = '[key]' 
         k = '[key]'
         counter = 1
+
         for number_layer_1 in range(len(dictionary)):
-            print()
             
             if number_layer_1+1 == dictionary_of_levels.get(dictionary[key]['Level'], 0) and type(dictionary[key]['Level']) != int:
                 dictionary[key]['Level'] = number_layer_1+1
@@ -37,21 +42,23 @@ def show2(dictionary):
             except Exception as e:
                 break
 
-    f = open("/home/aldo/Documents/envio_click/A/A2_1.txt","w+")
-    f2 = open("/home/aldo/Documents/envio_click/A/A2_2.txt","w+")
-    f2.write(str(dictionary))
-    f.close()
-    f2.close()
+    if function == 'main':
+        f = open(f'{os.getcwd()}/A/A2_2.txt', "w")
+        f.write(str(dictionary))
+        f.close()
+        dictionary_read.close()
+    else:
+        dictionary_read.close()
+    print("""█████ █████ █████ █████ █████ █████ █████ \n""")
+    input("\n\nPress enter to continue operations...")
 
 
 def addData(key_name, value, route):
-    f = open("A2_1.txt", "w+")
-    with open('/home/aldo/Documents/envio_click/A/A2_2.txt', 'r+') as dictionary_read:
+    with open(f'{os.getcwd()}/A/A2_2.txt', 'r+') as dictionary_read:
         contents = dictionary_read.read()
-        dictionary_read = ast.literal_eval(contents)
+        dictionary = ast.literal_eval(contents)
         route_length = len(route)
 
-        dictionary = dictionary3
         key_counter = 0
         save_route = str(f'dictionary')
         for key in dictionary.keys():
@@ -63,7 +70,6 @@ def addData(key_name, value, route):
             break_out_flag_key1 = False
             break_out_flag_route_nested = False
 
-            print(f"{dictionary[key].get('Level', 0)} == {route[0]} key_counter = {key_counter}")
             if dictionary[key].get('Level', 0) == route[0]:
                 if route_length == 1:
                     dictionary[key][key_name] = value
@@ -110,22 +116,38 @@ def addData(key_name, value, route):
             if break_out_flag_key1 == True:
                 break
         addData1 = f'{save_route}["name"] = "{value}"'
-        print(addData1)
         exec(addData1)
+        f = open(f'{os.getcwd()}/A/A2_2.txt', "w")
+        f.write(str(dictionary))
+        f.close()
+        dictionary_read.close()
         print('Sending show2')
-        show2(dictionary)
+        show('addData')
 
-    
     
 if __name__ == '__main__':
-    show2(dictionary3)
-    key = str(input("Enter your key name: "))
-    value = str(input("Enter your value: "))
-    level = int(input("Enter your level: "))
-    route = []
+    while True:
+        option = print_menu()
 
-    print('\nEnter your route: ')
-    for num in range(1,level+1):
-        number_of_layer = int(input(f"Enter the number of layer[{num}]:"))
-        route.append(number_of_layer)
-    addData(key, value, route)
+        if option == 1:
+            show('main')    
+        elif option == 2:
+            show('main')
+            key = str(input("\nEnter your key name: "))
+            value = str(input("Enter your value: "))
+            level = int(input("Enter your level: "))
+            route = []
+
+            print('\nEnter your route: ')
+            for num in range(1,level+1):
+                number_of_layer = int(input(f"Enter the number of layer[{num}]:"))
+                route.append(number_of_layer)
+            addData(key, value, route)
+
+        elif option == 3:
+            print('Thanks message before exiting')
+            exit()
+        else:
+            print('Invalid option. Please enter a number between 1 and 3.')
+        os.system ("clear")
+
