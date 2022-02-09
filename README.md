@@ -198,6 +198,125 @@ For this project you need to have Docker and Docker installed
 <a href="https://docs.docker.com/compose/install/">Linux Windows Mac</a>
 </li>
 
+### Sección A.
+#### A1
+Sin hacer uso de librerías o funciones nativas. Hacer un programa que tomando una
+palabra o párrafo:
+* Contar cuántas vocales hay.
+* Reemplazar las vocales por la vocal consecutiva (ejemplo: “hacer” se cambia a
+“hecir”).
+
+#### A2
+Sin hacer uso de librerías o funciones nativas. Escribe un programa el cual tomando un
+conjunto de datos con sus atributos (Figura A):
+* Ordenar los datos de acuerdo al nivel de prioridad (padre, hijo).
+* Utilizar un método llamado show() que permita visualizar los datos ordenados.
+* Utilizar un método llamado addData() que permita ingresar un nuevo dato (o
+conjunto de datos) y ajustar necesario para colocar el dato en la posición adecuada.
+<!--
+<div align="center">
+ <img src=https://i.imgur.com/ISaMjAf.png width=500 alt="Header" >
+</div>
+-->
+
+#### Para mostrar el contenido de nuestro diccionario seleccionamos la función show() con la opción 1 💻
+```
+aldo@aldo-hp:~/Documents/envio_click$ /bin/python3.9 /home/aldo/Documents/envio_click/A/A2.py
+__________             _____      __________________      ______  
+___  ____/_________   ____(_)_______  ____/__  /__(_)________  /__
+__  __/  __  __ \_ | / /_  /_  __ \  /    __  /__  /_  ___/_  //_/
+_  /___  _  / / /_ |/ /_  / / /_/ / /___  _  / _  / / /__ _  ,<   
+/_____/  /_/ /_/_____/ /_/  \____/\____/  /_/  /_/  \___/ /_/|_|                       
+
+1 - Show dictionary
+2 - Add a name
+3 - Exit
+Enter your choice: 2
+
+█████ █████ █████ █████ █████ █████ █████
+DataA
+        One nameA
+                One nameSubdataA
+                One nameSubdataA2
+                        One nameSubdataAA
+                                One nameSubdataAAA
+DataB
+        One nameB
+                One nameSubdataB
+DataC
+        One nameC
+                One nameSubdataC
+█████ █████ █████ █████ █████ █████ █████ 
+
+
+
+Press enter to continue operations...
+```
+
+#### Para modificar un nombre del diccionario seleccionamos la opción 2 💻
+Nos solicitará el nivel y la ruta para llegar al nombre a cambiar, en este caso está en el tercer nivel con la ruta [1][2][1]
+```
+aldo@aldo-hp:~/Documents/envio_click$ /bin/python3.9 /home/aldo/Documents/envio_click/A/A2.py
+__________             _____      __________________      ______  
+___  ____/_________   ____(_)_______  ____/__  /__(_)________  /__
+__  __/  __  __ \_ | / /_  /_  __ \  /    __  /__  /_  ___/_  //_/
+_  /___  _  / / /_ |/ /_  / / /_/ / /___  _  / _  / / /__ _  ,<   
+/_____/  /_/ /_/_____/ /_/  \____/\____/  /_/  /_/  \___/ /_/|_|                       
+
+1 - Show dictionary
+2 - Add a name
+3 - Exit
+Enter your choice: 2
+
+█████ █████ █████ █████ █████ █████ █████
+DataA
+        One nameA
+                One nameSubdataA
+                One nameSubdataA2
+                   --> One nameSubdataAA
+                                One nameSubdataAAA
+DataB
+        One nameB
+                One nameSubdataB
+DataC
+        One nameC
+                One nameSubdataC
+█████ █████ █████ █████ █████ █████ █████ 
+
+
+
+Enter your key name: name
+Enter your value: envioclick
+Enter your level: 3
+
+Enter your route: 
+Enter the number of layer[1]:1
+Enter the number of layer[2]:2
+Enter the number of layer[3]:1
+Sending show2
+
+
+
+█████ █████ █████ █████ █████ █████ █████
+DataA
+        One nameA
+                One nameSubdataA
+                One nameSubdataA2
+                        envioclick
+                                One nameSubdataAAA
+DataB
+        One nameB
+                One nameSubdataB
+DataC
+        One nameC
+                One nameSubdataC
+█████ █████ █████ █████ █████ █████ █████ 
+
+Press enter to continue operations...
+
+```
+
+
 
 ### Aplicación para gestionar una flota de vehículos 🚚📦
 <div align="center">
